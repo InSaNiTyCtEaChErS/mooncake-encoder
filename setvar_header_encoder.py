@@ -30,6 +30,8 @@ hex_convert={ #hex conversion table because the bytes.fromhex function wan't wor
 vars_ = [ #variables!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     "fin","f0","f1","f2","f3","f4","f5","f6","f7","f8","f9","f10","f11","f12","f13","fout", #function variables
     "hp","x","y","z","ax","ay","az","level", #8 basic game variables
+
+    #add more here if you want more!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     
     ]
 ascii_ = "abcdefghijklmnopqrstuvwxyz012345"
@@ -62,8 +64,13 @@ def encodev2(input_):
     input_ += " "
     input_ = input_.lstrip(" ")
     if ("="in input_) and not ("if" in input_):
-        varset = int(input_[0:(int(input_.find("=")))])
+        try:
+            varset = int(input_[0:(int(input_.find("=")))])
+        except:
+            varset = vars_[(input_[0:(int(input_.find("=")))])]  #try understanding this line
         for char in input_[int(input_.find("="))+1:-1]:
+            if char == "#":
+                break
             if char in "+-*/":
                 operations += table[char]*(2^i)
                 i+=1
@@ -80,7 +87,7 @@ def encodev2(input_):
                 if var == 1:
                     variable *=10
                     variable += int(char)
-				elif var <= 0:
+                elif var <= 0:
                     num *= 10
                     num += int(char)
             elif char == "r":
@@ -106,17 +113,25 @@ def encodev2(input_):
     elif "if" in input_:
         input_=input_[3:-1] #removing the "if "
         for char in input_:
-            if char == ":":
+            if char == ":" or char == "#":
                 break
             if char == "r":
-                print ("e")
+                var = 1
+            if char in "abcdefghijklmnopqrstuvwxyz":
+                var += 2
+                varname += char
+            elif char in "0123456789" and var != 1:
+                varname += char
             if char in "0123456789":
                 var *= 10
                 var += int(char)
             elif char in "<>=!":
                 vars_ *= 256
-                vars_ += var
-                var = 0
+                if var == 1:
+                    vars_ += var
+                    var = 0
+                else:
+                    vars_ += vars_[varname]
                 operations += table2[char]
                 operations *= 8
             elif char in "aox|": #| is a sign to or instead of and all the operands together!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -246,7 +261,8 @@ instruction_order = [6,4,0,0,1,0,0,1,0,0,1,0,0,1,5,5,5,5,2,
                      4,0,0,1,0,0,1,0,0,1,0,0,1,5,5,5,5,2,3
                      ]
 print(len(instruction_order))
-input_list = [
+input_list = [ 
+    '#fibbonachi',
     '0=1',
     '1=r0',
     '2=r1+r0',
@@ -259,24 +275,26 @@ output_1 = ""
 line = 0
 instruction_index = 0
 for item in input_list:
-    output_1 += str(encodev2(item))
-    while True:
-        if int(output_1)%8 != instruction_order[instruction_index]:
-            output += "\
-            "
-            instruction_index += 1
-            instruction_index %= len(instruction_order)
-        else:
-            break
-    instruction_index += 1
-    instruction_index %= len(instruction_order)
-    output += convert(output_1)
-    output+="\
-    "
-    line += 1
+    if item[0] != "#":
+        output_1 += str(encodev2(item))
+        while True:
+            if int(output_1)%8 != instruction_order[instruction_index]:
+                output += "\
+                "
+                instruction_index += 1
+                instruction_index %= len(instruction_order)
+            else:
+                break
+        instruction_index += 1
+        instruction_index %= len(instruction_order)
+        output += convert(output_1)
+        output+="\
+        "
+        line += 1
+    else:
+        print("comment: "+ item)
 
 outputs = makeConstants(output)
 
 print('!!donw!!')
-
 print(outputs)
