@@ -264,12 +264,13 @@ instruction_order = [6,4,0,0,1,0,0,1,0,0,1,0,0,1,5,5,5,5,2,
                      4,0,0,1,0,0,1,0,0,1,0,0,1,5,5,5,5,2,3
                      ]
 print(len(instruction_order))
+
 input_list = [ 
-    '#fibbonachi',
+    '#example: fibbonachi',
     '0=1',
     '1=r0',
     '2=r1+r0',
-    'if63=3:',
+    'if63!=3:',
     '    branch1'
     ]
 
@@ -301,3 +302,4 @@ outputs = makeConstants(output)
 
 print('!!donw!!')
 print(outputs)
+
