@@ -27,7 +27,7 @@ hex_convert={ #hex conversion table because the bytes.fromhex function wan't wor
     'a':10,'b':11,'c':12,'d':13,'e':14,'f':15}
 
 
-vars_ = [ #variables!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+vars_l = [ #variables!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     "fin","f0","f1","f2","f3","f4","f5","f6","f7","f8","f9","f10","f11","f12","f13","fout", #function variables
     "hp","x","y","z","ax","ay","az","level", #8 basic game variables
 
@@ -57,6 +57,7 @@ def encodev2(input_):
     header = 0
     variable = 0
     variables = []
+    varname = ""
     for char in input_:
         if char == " ":
             header += 1
@@ -75,9 +76,9 @@ def encodev2(input_):
                 operations += table[char]*(2^i)
                 i+=1
                 if var >= 1:
-                    if var >= 2 and var != "r":
-                        variables.append[vars_[varname]]
-                    else:
+                    try:
+                        variables.append[vars_l.index(varname)]
+                    except:
                         variables.append("r"+str(variable))
                 else:
                     variables.append(num)
@@ -128,10 +129,12 @@ def encodev2(input_):
             elif char in "<>=!":
                 vars_ *= 256
                 if var == 1:
-                    vars_ += var
-                    var = 0
-                else:
-                    vars_ += vars_[varname]
+                    try:
+                        vars_ += vars_l.index(varname)
+                    except:
+                        vars_ += var
+                    var = 0  
+                    varname = ""
                 operations += table2[char]
                 operations *= 8
             elif char in "aox|": #| is a sign to or instead of and all the operands together!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
