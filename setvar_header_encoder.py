@@ -68,7 +68,7 @@ def encodev2(input_):
                 operations += table[char]*(2^i)
                 i+=1
                 if var >= 1:
-                    if var >= 2:
+                    if var >= 2 and var != "r":
                         variables.append[vars_[varname]]
                     else:
                         variables.append("r"+str(variable))
@@ -80,12 +80,12 @@ def encodev2(input_):
                 if var == 1:
                     variable *=10
                     variable += int(char)
-                else:
+				elif var <= 0:
                     num *= 10
                     num += int(char)
             elif char == "r":
                 var = 1
-            elif char in "abcdefghijklmnopqrstuvwxyz":
+            elif char in "abcdefghijklmnopqrstuvwxyz0123456789":
                 var += 2
                 varname += char
             else:
@@ -119,7 +119,7 @@ def encodev2(input_):
                 var = 0
                 operations += table2[char]
                 operations *= 8
-            elif char in "aox|": #| is a sign to or instead of and !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            elif char in "aox|": #| is a sign to or instead of and all the operands together!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 if char == "a":
                     num += 1
                 elif char == "o":
@@ -278,4 +278,5 @@ for item in input_list:
 outputs = makeConstants(output)
 
 print('!!donw!!')
+
 print(outputs)
