@@ -151,6 +151,8 @@ def encodev2(input_):
         return (6+(output*16+header)*8)
     elif "return" in input:
         return (7+(header*8))
+    elif "call" in input_:
+        return(ascii_enc(input_[4:-1])*16+(header*8), "call")
     else:
         print("    invalid line: "+input_)
 
@@ -246,7 +248,7 @@ def makeConstants(fileinput):
 
 # note: inputs are always set to variable 63!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-instruction_order = [6,4,0,0,1,0,0,1,0,0,1,0,0,1,5,5,5,5,2,
+instruction_order = [6,4,0,0,1,0,0,1,0,0,1,0,0,1,5,5,5,5,
                      4,0,0,1,0,0,1,0,0,1,0,0,1,5,5,5,5,2,3,7
                      ]
 print(len(instruction_order))
@@ -263,17 +265,25 @@ output = ""
 output_1 = ""
 line = 0
 instruction_index = 0
+e=0
 for item in input_list:
     if item[0] != "#":
-        output_1 += str(encodev2(item))
-        while True:
-            if int(output_1)%8 != instruction_order[instruction_index]:
-                output += "\
-                "
-                instruction_index += 1
-                instruction_index %= len(instruction_order)
-            else:
-                break
+        e=encodev2(item)
+        try:
+            output_1 += str(e[0])
+            if e[1]=="call":
+                while not instruction_index == len(instruction_order)-1:
+                    instruction_index += 1
+        except:
+            output_1 += str(e)
+            while True:
+                if int(output_1)%8 != instruction_order[instruction_index]:
+                    output += "null\
+                    "
+                    instruction_index += 1
+                    instruction_index %= len(instruction_order)
+                else:
+                    break
         instruction_index += 1
         instruction_index %= len(instruction_order)
         output += convert(output_1)
