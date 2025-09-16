@@ -4,25 +4,10 @@ print('hello')
 
 #time to define tables
 
-table = {
-    '+' :0b00000,
-    '-' :0b00001,
-    '*' :0b10000,
-    '/' :0b10001
-    }
-table2 = {
-    '<':0,
-    '>':1,
-    '=':2,
-    '!':3
-}
-shapes ={
-	0 :'C',
-	1 :'R'
-    }
-colors ={
-	0 :'u',1 :'r',2 :'y',3 :'g',4 :'c',5 :'b',	6 :'m',7 :'w'
-    }
+table = {'+' :0b00000,'-' :0b00001,'*' :0b10000,'/' :0b10001}
+table2 = {'<':0,'>':1,'=':2,'!':3}
+shapes ={0 :'C',1 :'R'}
+colors ={0 :'u',1 :'r',2 :'y',3 :'g',4 :'c',5 :'b',	6 :'m',7 :'w'}
 hex_convert={ #hex conversion table because the bytes.fromhex function wan't working
     'a':10,'b':11,'c':12,'d':13,'e':14,'f':15}
 
@@ -164,9 +149,10 @@ def encodev2(input_):
         input_ = input_[3:-1]
         output = ascii_enc(input_)
         return (6+(output*16+header)*8)
+    elif "return" in input:
+        return (7+(header*8))
     else:
         print("    invalid line: "+input_)
-        
 
 def convert(input_):
     output=''
@@ -261,10 +247,9 @@ def makeConstants(fileinput):
 # note: inputs are always set to variable 63!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 instruction_order = [6,4,0,0,1,0,0,1,0,0,1,0,0,1,5,5,5,5,2,
-                     4,0,0,1,0,0,1,0,0,1,0,0,1,5,5,5,5,2,3
+                     4,0,0,1,0,0,1,0,0,1,0,0,1,5,5,5,5,2,3,7
                      ]
 print(len(instruction_order))
-
 input_list = [ 
     '#example: fibbonachi',
     '0=1',
@@ -302,4 +287,3 @@ outputs = makeConstants(output)
 
 print('!!donw!!')
 print(outputs)
-
