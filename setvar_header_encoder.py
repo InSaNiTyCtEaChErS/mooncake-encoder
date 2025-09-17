@@ -5,7 +5,7 @@ print('hello')
 #time to define tables
 
 table = {'+' :0b00000,'-' :0b00001,'*' :0b10000,'/' :0b10001}
-table2 = {'<':0,'>':1,'=':2,'!':3}
+table2 = {'<':0,'>':1,'=':2,'!':3,'|':4}
 shapes ={0 :'C',1 :'R'}
 colors ={0 :'u',1 :'r',2 :'y',3 :'g',4 :'c',5 :'b',	6 :'m',7 :'w'}
 hex_convert={ #hex conversion table because the bytes.fromhex function wan't working
@@ -62,7 +62,7 @@ def encodev2(input_):
                 i+=1
                 if var >= 1:
                     try:
-                        variables.append[vars_l.index(varname)]
+                        variables.append("r"+vars_l.index(varname))
                     except:
                         variables.append("r"+str(variable))
                 else:
@@ -99,37 +99,30 @@ def encodev2(input_):
     elif "if" in input_:
         input_=input_[3:-1] #removing the "if "
         for char in input_:
-            if char == ":" or char == "#":
-                break
-            if char == "r":
-                var = 1
-            if char in "abcdefghijklmnopqrstuvwxyz":
-                var += 2
-                varname += char
-            elif char in "0123456789" and var != 1:
-                varname += char
-            if char in "0123456789":
-                var *= 10
-                var += int(char)
-            elif char in "<>=!":
-                vars_ *= 256
-                if var == 1:
-                    try:
-                        vars_ += vars_l.index(varname)
-                    except:
-                        vars_ += var
-                    var = 0  
-                    varname = ""
+            if char in "<>=!|":   # <> and != are used normally, but | tells the computer to or comparisons together
                 operations += table2[char]
                 operations *= 8
-            elif char in "aox|": #| is a sign to or instead of and all the operands together!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                if char == "a":
-                    num += 1
-                elif char == "o":
-                    num += 2
+                try:
+                    vars_ += vars_l.index(vars)
+                except:
+                    vars_ += var
+                vars = ""
+                var = 0
+            elif char == "r":
+                if variable == 0:
+                    variable = 1
+            elif char in "0123456789": #checking where to pu numbers
+                if var == 0:
+                    num += int(char)
+                    num *= 10
+                elif variable == 1:
+                    var += int(char)
+                    var *= 10
                 else:
-                    num += 4
-                num *= 8
+                    vars += char
+            elif char in "abcdefghijklmnopqrstuvwxyz": #doing variable shenanigans
+                variable += 2
+                vars += char
             else:
                 print("invalid char in if: "+char)
         return((((vars_+operations*(2^32))*(2^18)+num*8)+header)*8+1)
@@ -297,3 +290,4 @@ outputs = makeConstants(output)
 
 print('!!donw!!')
 print(outputs)
+
