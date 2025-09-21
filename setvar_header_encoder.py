@@ -135,9 +135,11 @@ def encodev2(input_):
     elif "gpu" in input_: #gpu 0-1
         input_ = input_[3:-1]
         num = int(input_[0:input_.find("-")])
-        var = int(input_[input_.find('-')+1:-1])#
+        vars_ = input_[input_.find('-'):-1]
+        var = int(input_[input_.find('-')+1:-vars_.find('-')])#
         output = num*65536 + var #number to set from, then number to set to. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        return(5+(output*16+header)*8)
+        nums_ = int(vars_[1:-1])
+        return(5+(output*16+header+nums_*(2^20))*8)
     elif "def" in input_:
         input_ = input_[3:-1]
         output = ascii_enc(input_)
@@ -290,4 +292,3 @@ outputs = makeConstants(output)
 
 print('!!donw!!')
 print(outputs)
-
