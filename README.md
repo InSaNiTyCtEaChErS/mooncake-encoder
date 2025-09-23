@@ -46,4 +46,22 @@ here's fibbonachi as another example
     3    f0=f1+f0
     4    branch2
 
+and last but not least, cosine.
+
+        Def cosine
+        f0=fin*fin
+        f0=405*f0
+        f0=0-f0+1
+        f1=0-fin
+        f1=f1*f1
+        f1=0-405*f1-1
+        f2=f0*f1
+        If f2 >= 0
+            f5=f2/8
+        Else
+            f5=0-f2/8
+        f5=f5*8/9
+        fout=f5
+
+
         
