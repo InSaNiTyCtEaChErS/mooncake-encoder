@@ -21,7 +21,7 @@ vars_l = [ #variables!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     ]
 ascii_ = "abcdefghijklmnopqrstuvwxyz012345"
 def ascii_enc(in_):
-    out = ""
+    out = 0
     for char in in_:
         out += ascii_.find(char)
         out *= 32
@@ -45,27 +45,19 @@ def encodev2(input_):
     varname = ""
     input0 = input_
     input_ = ""
-    for char in input0:
-        if char == "#":
-            break
-        else:
-            input_ += char
     header = header // 4
-    input_ += " "
-    input_ = input_.lstrip(" ")
-    for char in input_ :
-        if char != "#":
-            input_ += char
-        else:
-            break
+    for char in input0 :
+        if char != " ":
+            if char != "#":
+                input_ += char
+            else:
+                break
     if ("="in input_) and not ("if" in input_):
         try:
             varset = int(input_[0:(int(input_.find("=")))])
         except:
-            varset = vars_[(input_[0:(int(input_.find("=")))])]  #try understanding this line
+            varset = vars_l.index(input_[0:(int(input_.find("=")))])   #try understanding this line
         for char in input_[int(input_.find("="))+1:-1]:
-            if char == "#":
-                break
             if char in "+-*/":
                 operations += table[char]*(2^i)
                 i+=1
@@ -159,7 +151,7 @@ def encodev2(input_):
         input_ = input_[3:-1]
         output = ascii_enc(input_)
         return (6+(output*16+header)*8)
-    elif "return" in input:
+    elif "return" in input_:
         return (7+(header*8))
     elif "call" in input_:
         return(ascii_enc(input_[4:-1])*16+(header*8), "call")
@@ -272,7 +264,7 @@ instruction_index = 0
 e=0
 for item in input_list:
     if item[0] != "#":
-        e=encodev2(item)
+        e=int(encodev2(item))
         try:
             output_1 += str(e[0])
             if e[1]=="call":
