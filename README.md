@@ -1,16 +1,18 @@
 How to program things for mooncake
 
+ifs can only go up to 4 layers deep because of else cases (12 spaces, in increments of 4)
 
 edit the list "input_list" to strings containing your operations, one on each line.
 
-##for current version, this is line 251
+###for current version, this is line 251
   
-
 you can assign variables to numbers on line 30 of the program
 
-##note: variable numbers are automatically created based on how far along the list the number is
+###note: variable numbers are automatically created based on how far along the list the number is
   
-##note 2: the 64th variable is 16 bits of input (not sure what order rn)
+###note 2: the 64th variable is 16 bits of input (not sure what order rn)
+
+    hotbar control variables are 61, 62, and 63. 61 selects a slot to set to (1 based) and 62-63 directly control a 3 bit per pixel 3*3 display next to each item
   
 
     all integers are unsigned, and numbers are zero based
