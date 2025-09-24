@@ -43,12 +43,21 @@ def encodev2(input_):
     variable = 0
     variables = []
     varname = ""
-    for char in input_:
-        if char == " ":
-            header += 1
+    input0 = input_
+    input_ = ""
+    for char in input0:
+        if char == "#":
+            break
+        else:
+            input_ += char
     header = header // 4
     input_ += " "
     input_ = input_.lstrip(" ")
+    for char in input_ :
+        if char != "#":
+            input_ += char
+        else:
+            break
     if ("="in input_) and not ("if" in input_):
         try:
             varset = int(input_[0:(int(input_.find("=")))])
@@ -97,7 +106,10 @@ def encodev2(input_):
         nums_ += vars_ + varset
         return(nums_*8)
     elif "if" in input_:
-        input_=input_[3:-1] #removing the "if "
+        if "elif" in input_:
+            input_=input_[5:-1]
+        else:
+            input_=input_[3:-1] #removing the "if "
         for char in input_:
             if char in "<>=!|":   # <> and != are used normally, but | tells the computer to or comparisons together
                 operations += table2[char]
@@ -126,9 +138,12 @@ def encodev2(input_):
             else:
                 print("invalid char in if: "+char)
         return((((vars_+operations*(2^32))*(2^18)+num*8)+header)*8+1)
+    elif "else" in input_:
+        print(e)
+        return(1+(header+4)*8)
     elif "branch" in input_:
         return(2+(int(input_[6:-1])*16+header)*8)
-    elif "save" in input_:
+    elif "save" in input_: # save and load use an index from 0 to 524287 for where to save/load the upper 64 registers !!!!!!!!!!!!!!!!!!!!!!!!!!
         return(3+(int(input_[4:-1])*16+header)*8)
     elif "load" in input_:
         return(4+(int(input_[4:-1])*16+header)*8)
@@ -214,7 +229,7 @@ def encodeValue(value):
 	
 	return b64encode(v.encode(ENCODING)).decode(ENCODING)
 
-MAX_X = 37
+MAX_X = 38
 
 def makeConstants(fileinput):
     bp = json.loads(EMPTY_BP)
@@ -227,7 +242,7 @@ def makeConstants(fileinput):
             value = line_.strip()
             ent = {}
             ent["X"] = num % MAX_X
-            ent["Y"] = num // MAX_X * 8
+            ent["Y"] = num // MAX_X * 4
             ent["R"] = 3
             ent["T"] = SIGNAL_TYPE
             ent["C"] = encodeValue(value)
@@ -247,14 +262,8 @@ instruction_order = [6,4,0,0,1,0,0,1,0,0,1,0,0,1,5,5,5,5,
                      4,0,0,1,0,0,1,0,0,1,0,0,1,5,5,5,5,2,3,7
                      ]
 print(len(instruction_order))
-input_list = [ 
-    '#example: fibbonachi',
-    '0=1',
-    '1=r0',
-    '2=r1+r0',
-    'if63!=3:',
-    '    branch1'
-    ]
+f=open("input_program.txt")
+input_list = f.readlines()
 
 output = ""
 output_1 = ""
