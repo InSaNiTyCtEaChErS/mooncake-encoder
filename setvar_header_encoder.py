@@ -19,13 +19,13 @@ vars_l = [ #variables!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     #add more here if you want more!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     
     ]
-ascii_ = "abcdefghijklmnopqrstuvwxyz012345"
+ascii_ = "abcdefghijklmnopqrstuvwxyz0123456789[](){}<>,._-"
 def ascii_enc(in_):
     out = 0
     for char in in_:
         out += ascii_.find(char)
-        out *= 32
-    out /= 32
+        out *= 48
+    out /= 48
     return (out)
 
 
@@ -282,7 +282,7 @@ for item in input_list:
                     break
         instruction_index += 1
         instruction_index %= len(instruction_order)
-        output += convert(output_1)
+        output += convert(output_1//8)
         output+="\
         "
         line += 1
