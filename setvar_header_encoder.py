@@ -19,6 +19,7 @@ vars_l = [ #variables!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     #add more here if you want more!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     
     ]
+
 ascii_ = "abcdefghijklmnopqrstuvwxyz0123456789[](){}<>,._-"
 def ascii_enc(in_):
     out = 0
@@ -27,8 +28,6 @@ def ascii_enc(in_):
         out *= 48
     out /= 48
     return (out)
-
-
 
 def encodev2(input_):
     print(str(line),": ",input_)
@@ -85,14 +84,14 @@ def encodev2(input_):
             else:
                 print("setvar instruction error here: "+input_)
         for num in variables:
-            if "r" in num:
+            if "r" in str(num):
                 vars_ *= 256
                 vars_ += int("0"+num[1:-1])
             else:
                 nums_ *= 65536
                 nums_ += int(num)
         #shifting them to align them for returning
-        varset += header * 256
+        varset = header * 8+ varset * 128
         varset *= 2^96
         vars_ *= 2^64
         nums_ += vars_ + varset
@@ -107,10 +106,9 @@ def encodev2(input_):
                 operations += table2[char]
                 operations *= 8
                 try:
-                    vars_ += vars_l.index(vars)
+                    vars_ += vars_l.index(var)
                 except:
                     vars_ += var
-                vars = ""
                 var = 0
             elif char == "r":
                 if variable == 0:
@@ -123,10 +121,10 @@ def encodev2(input_):
                     var += int(char)
                     var *= 10
                 else:
-                    vars += char
+                    vars_+= char
             elif char in "abcdefghijklmnopqrstuvwxyz": #doing variable shenanigans
                 variable += 2
-                vars += char
+                vars_+= char
             else:
                 print("invalid char in if: "+char)
         return((((vars_+operations*(2^32))*(2^18)+num*8)+header)*8+1)
@@ -262,6 +260,7 @@ output_1 = ""
 line = 0
 instruction_index = 0
 e=0
+
 for item in input_list:
     if item[0] != "#":
         e=int(encodev2(item))
@@ -282,7 +281,7 @@ for item in input_list:
                     break
         instruction_index += 1
         instruction_index %= len(instruction_order)
-        output += convert(output_1//8)
+        output += convert(int(output_1)//8)
         output+="\
         "
         line += 1
