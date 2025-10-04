@@ -19,32 +19,32 @@ you can assign variables to numbers on line 18 of the program (just add a variab
 here's how player movement would look
 
 
-     0  def(move):
-     1    63=r31*65521 
-     2      #sets input to itself with only the first four bits remaining.
-     3      #variable 63 is input
-     4    f0=31*65534
-     5    f1=31*65533   
-     6    f2=31*65531 
-     7    f3=31*65522  
-     8      #probably bad bitmasks to single out individual bits  
-     9    if f0==1:     
-    10      x=x+1     
-    11    if f1==1:       
-    12      x=x-1 
-    13    if f2==1:       
-    14      y=y+1
-    15    if f3==1:
-    16      y=y-1
-    17      #movement directions added to x and y
+       def(move):
+         63=r31*65521 
+            #sets input to itself with only the first four bits remaining.
+            #variable 63 is input
+          f0=31*65534
+          f1=31*65533   
+          f2=31*65531 
+          f3=31*65522  
+            #probably bad bitmasks to single out individual bits  
+          if f0==1:     
+            x=x+1     
+          if f1==1:       
+            x=x-1 
+          if f2==1:       
+            y=y+1
+          if f3==1:
+            y=y-1
+            #movement directions added to x and y
 
 here's fibbonachi as another example
 
-    0  def(fibbonachi):
-    1    f0=1
-    2    f1=f0+f1
-    3    f0=f1+f0
-    4    branch2
+       def(fibbonachi):
+         f0=1
+         f1=f0+f1
+         f0=f1+f0
+         branch2
 
 and last but not least, cosine.
 
